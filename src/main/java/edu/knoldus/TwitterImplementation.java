@@ -8,24 +8,29 @@ import java.util.concurrent.CompletableFuture;
 
 public class TwitterImplementation {
     public static void main(String[] args) throws InterruptedException {
-        LocalDate date = LocalDate.of (2018,03,06);
-        TwitterApplication analysis = new TwitterApplication ();
+        final LocalDate date = LocalDate.of(2018,03,06);
+        TwitterApplication analysis = new TwitterApplication();
 
-        CompletableFuture<List<Status>> fetchedTweets = analysis.fetchLatestTweets ();
-        fetchedTweets.thenAccept (status -> status.forEach (System.out::println));
+        CompletableFuture<List<Status>> fetchedTweets = analysis.fetchLatestTweets();
+        fetchedTweets.thenAccept(statuses -> statuses.forEach(status-> System.out.println(status.getText())));
 
-        CompletableFuture<List<Status>> oldToNewTweets = analysis.olderToNewerTweets ();
-        oldToNewTweets.thenAccept (status -> status.forEach (System.out::println));
+        CompletableFuture<List<Status>> oldToNewTweets = analysis.olderToNewerTweets();
+        oldToNewTweets.thenAccept(statuses -> statuses.forEach(status-> System.out.println(status.getText())));
 
-        CompletableFuture<List<Status>> accordingToRetweets = analysis.reTweets ();
-        accordingToRetweets.thenAccept (System.out::println);
+        CompletableFuture<List<Status>> accordingToRetweets = analysis.reTweets();
+        accordingToRetweets.thenAccept(statuses -> statuses
+                .forEach(status -> System.out.println(status.getText())));
 
-        CompletableFuture<List<Status>> accordingToHigherLikes = analysis.likesHigherToLower ();
-        accordingToHigherLikes.thenAccept (System.out::println);
+        CompletableFuture<List<Status>> accordingToHigherLikes = analysis.likesHigherToLower();
+        accordingToHigherLikes.thenAccept(statuses -> statuses.forEach(status -> System.out.println(status.getText())));
 
-        CompletableFuture<List<Status>> tweetsOnGivenDate = analysis.listTweetsOnGivenDate (date);
-        tweetsOnGivenDate.thenAccept (System.out::println);
+        CompletableFuture<List<Status>> tweetsOnGivenDate = analysis.listTweetsOnGivenDate(date);
+        tweetsOnGivenDate.thenAccept(statuses -> statuses.forEach(status -> System.out.println(status.getText())));
 
-        Thread.sleep (5000);
+        CompletableFuture<Integer> likesInInterval = analysis.numberOfLikesInGivenInterval();
+        likesInInterval.thenAccept(x -> System.out.println("number of likes in given interval are : " + x)) ;
+
+
+        Thread.sleep(5000);
     }
 }
